@@ -23,4 +23,4 @@ Details for Milestone are available on Canvas (left sidebar, Course Project) or 
 
 ## References
 
-{Add your stuff here}
+https://www.kaggle.com/mirichoi0218/insurance
