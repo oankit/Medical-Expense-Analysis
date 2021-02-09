@@ -8,11 +8,11 @@ Details for Milestone are available on Canvas (left sidebar, Course Project) or 
 
 ## Describe your topic/interest in about 150-200 words
 
-{Add your stuff here}
+For this project with the dataset we have chosen we want to look at how certain variables such as sex,bmi,smoker and the region they come from affect medical expenses for an individual. (What we want to explore exactly),(why the dataset is interesting)(what we hope to achieve analysing the data set)
 
 ## Describe your dataset in about 150-200 words
+This dataset is a simulated data set based off the us census which shows how certain variables effect the lifetime medical expenses of an individual. The dataset contains a variety of variables such as age,sex,bmi,Number of children,smoker,region and finally medical charges. This dataset was constructed by Brett Lantz using R for his book on machine learning which was published in October 2013
 
-{Add your stuff here}
 
 ## Team Members
 
