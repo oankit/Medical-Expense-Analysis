@@ -17,7 +17,7 @@ This dataset is a simulated data set based off of the United States census which
 
 - Hugh Blakemore: 3rd year Math major!!
 - Rylan van der Meulen: 4th year Management student, starting CPA in September!
-- Person 3: one sentence about you!
+- Omar Ankit: 2nd year data science major!
 
 ## References
 
