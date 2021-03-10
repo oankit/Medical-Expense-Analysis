@@ -1,1 +1,1 @@
-Individual analysis
+**Individual analysis**
