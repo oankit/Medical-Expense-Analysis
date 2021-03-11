@@ -1,9 +1,13 @@
+<<<<<<< HEAD
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 sns.set_style("ticks")
 sns.set_theme("paper")
+=======
+
+>>>>>>> a5484ef00e79e6993b42b565b0e75aad8f2f5a88
 def load_and_process(url):
     import pandas as pd
     df1 = (
@@ -13,14 +17,18 @@ def load_and_process(url):
           .replace({'southwest':'SW','southeast':'SE','northeast':'NE','northwest':'NW'})
       )
     df2=(df1
+<<<<<<< HEAD
          .assign(Excess_charges= np.where(df1['charges'] > 13270 ,'Yes','No'))
          .assign(Over_BMI= np.where(df1['bmi'] > 24.9 ,'Yes','No'))
          .assign(Under_BMI= np.where(df1['bmi'] < 18.5 ,'Yes','No'))
+=======
+>>>>>>> a5484ef00e79e6993b42b565b0e75aad8f2f5a88
          .round({"charges":2,"bmi":1})
          .sort_values('charges',ascending=True)
          .reset_index(drop=True)  
     )
     return df2
+<<<<<<< HEAD
 
 def Health(url):
     df1 = (
@@ -153,3 +161,5 @@ def BoxPltob(df):
 def kdPlt(df):
     g=sns.kdeplot(df['charges'])
     return g 
+=======
+>>>>>>> a5484ef00e79e6993b42b565b0e75aad8f2f5a88
