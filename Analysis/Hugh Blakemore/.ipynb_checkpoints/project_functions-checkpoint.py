@@ -5,17 +5,18 @@ import seaborn as sns
 sns.set_style("ticks")
 sns.set_theme("paper")
 def load_and_process(url):
-    import pandas as pd
     df1 = (
           pd.read_csv(url)
           .rename({'children':'Dependents'},axis=1)
           .dropna(subset=['charges'])
+          .drop(['region','Dependents'],axis=1)
           .replace({'southwest':'SW','southeast':'SE','northeast':'NE','northwest':'NW'})
       )
     df2=(df1
          .assign(Excess_charges= np.where(df1['charges'] > 13270 ,'Yes','No'))
          .assign(Over_BMI= np.where(df1['bmi'] > 24.9 ,'Yes','No'))
          .assign(Under_BMI= np.where(df1['bmi'] < 18.5 ,'Yes','No'))
+         .assign(Healthy = np.where( ( (df1['bmi'] <= 24.9)& (df1['smoker'] == 'no') & (df1['bmi'] >= 18.5 ) ),'yes','no'))
          .round({"charges":2,"bmi":1})
          .sort_values('charges',ascending=True)
          .reset_index(drop=True)  
@@ -27,10 +28,12 @@ def Health(url):
           pd.read_csv(url)
           .rename({'children':'Dependents'},axis=1)
           .dropna(subset=['charges'])
+          .drop(['region','Dependents'],axis=1)
           .replace({'southwest':'SW','southeast':'SE','northeast':'NE','northwest':'NW'})
       )
     df2=(df1
          .assign(Excess_charges= np.where(df1['charges'] > 13270 ,'Yes','No'))
+         .assign(Healthy = np.where( ( (df1['bmi'] <= 24.9)& (df1['smoker'] == 'no') & (df1['bmi'] >= 18.5 ) ),'yes','no'))
          .round({"charges":2,"bmi":1})
          .sort_values('charges',ascending=True)
          .reset_index(drop=True)  
@@ -38,6 +41,7 @@ def Health(url):
 
 
     dfH=(df2[(df2['bmi'] >= 18.5) & (df2['bmi'] <=24.9 ) &(df2['smoker'] == 'no') ])
+    dfH= dfH.reset_index(drop=True)
     return dfH
 
 def unHealth(url):
@@ -45,17 +49,21 @@ def unHealth(url):
           pd.read_csv(url)
           .rename({'children':'Dependents'},axis=1)
           .dropna(subset=['charges'])
+          .drop(['region','Dependents'],axis=1)
           .replace({'southwest':'SW','southeast':'SE','northeast':'NE','northwest':'NW'})
       )
     df2=(df1
          .assign(Excess_charges= np.where(df1['charges'] > 13270 ,'Yes','No'))
+         .assign(Healthy = np.where( ( (df1['bmi'] <= 24.9)& (df1['smoker'] == 'no') & (df1['bmi'] >= 18.5 ) ),'yes','no'))
          .round({"charges":2,"bmi":1})
          .sort_values('charges',ascending=True)
          .reset_index(drop=True)  
     )
 
 
-    dfuH=(df2[(df2['bmi'] < 18.5) | (df2['bmi'] >24.9 ) | (df2['smoker'] == 'yes') ])
+    
+    dfuH = (df2[(df2['bmi'] < 18.5) | (df2['bmi'] >24.9 ) | (df2['smoker'] == 'yes') ])
+    dfuH = dfuH.reset_index(drop=True)
     return dfuH
 
 
@@ -92,6 +100,7 @@ def smoker(url):
           pd.read_csv(url)
           .rename({'children':'Dependents'},axis=1)
           .dropna(subset=['charges'])
+          .drop(['region','Dependents'],axis=1)
           .replace({'southwest':'SW','southeast':'SE','northeast':'NE','northwest':'NW'})
       )
     df2=(df1
@@ -102,7 +111,8 @@ def smoker(url):
     )
 
 
-    dfuH=(df2[(df2['smoker'] == 'yes') ])
+    dfuH=(df2[(df2['bmi'] >= 18.5) & (df2['bmi'] <= 24.9 ) & (df2['smoker'] == 'yes') ])
+    dfuH = dfuH.reset_index(drop=True)
     return dfuH
 
 def underBmi(url):
@@ -110,6 +120,7 @@ def underBmi(url):
           pd.read_csv(url)
           .rename({'children':'Dependents'},axis=1)
           .dropna(subset=['charges'])
+          .drop(['region','Dependents'],axis=1)
           .replace({'southwest':'SW','southeast':'SE','northeast':'NE','northwest':'NW'})
       )
     df2=(df1
@@ -120,7 +131,8 @@ def underBmi(url):
     )
 
 
-    dfuH=(df2[(df2['bmi'] < 18.5)])
+    dfuH=(df2[(df2['bmi'] < 18.5) & (df2['smoker'] == 'no') ])
+    dfuH = dfuH.reset_index(drop=True)
     return dfuH
 
 def overBmi(url):
@@ -128,6 +140,7 @@ def overBmi(url):
           pd.read_csv(url)
           .rename({'children':'Dependents'},axis=1)
           .dropna(subset=['charges'])
+          .drop(['region','Dependents'],axis=1)
           .replace({'southwest':'SW','southeast':'SE','northeast':'NE','northwest':'NW'})
       )
     df2=(df1
@@ -138,20 +151,64 @@ def overBmi(url):
     )
 
 
-    dfuH=(df2[(df2['bmi'] >24.9 )])
+    dfuH=(df2[(df2['bmi'] > 24.9 ) & (df2['smoker']=='no')])
+    dfuH = dfuH.reset_index(drop=True)
     return dfuH
+def BoxPlt(df):
+    g=sns.boxplot(x='Healthy',y='charges',data=df)
+    return g
 def BoxPlts(df):
     g=sns.boxplot(x='smoker',y='charges',data=df)
     return g
 def BoxPltub(df):
-    g=sns.boxplot(x='Under_BMI',y='charges',data=df)
+    df1=(df[(df['bmi'] <=24.9 ) &(df['smoker'] == 'no') ])
+    g=sns.boxplot(x='Under_BMI',y='charges',data=df1)
     return g
 def BoxPltob(df):
-    g=sns.boxplot(x='Over_BMI',y='charges',data=df)
+    df1=(df[(df['bmi'] >=18.5 ) &(df['smoker'] == 'no') ])
+    g=sns.boxplot(x='Over_BMI',y='charges',data=df1)
     return g
+def mean(df):
+    dfm=df['charges'].mean()
+    dfmr = round(dfm,2)
+    return dfmr
+def allsmoker(url):
+    df1 = (
+          pd.read_csv(url)
+          .rename({'children':'Dependents'},axis=1)
+          .dropna(subset=['charges'])
+          .drop(['region','Dependents'],axis=1)
+          .replace({'southwest':'SW','southeast':'SE','northeast':'NE','northwest':'NW'})
+      )
+    df2=(df1
+         .assign(Excess_charges= np.where(df1['charges'] > 13270 ,'Yes','No'))
+         .round({"charges":2,"bmi":1})
+         .sort_values('charges',ascending=True)
+         .reset_index(drop=True)  
+    )
 
-def htMap(df):
-    df1=pd.DataFrame({'BMI':df['bmi'],'charges':df['charges'],'Smoker':df['smoker']})
-    df1_cor = df1.corr()
-    g=sns.heatmap(df1_cor, annot=True, cmap='Blues')
-    return g
+
+    dfuH=(df2[(df2['smoker'] == 'yes')])
+    dfuH = dfuH.reset_index(drop=True)
+    return dfuH
+
+def obese(url):
+    df1 = (
+          pd.read_csv(url)
+          .rename({'children':'Dependents'},axis=1)
+          .dropna(subset=['charges'])
+          .drop(['region','Dependents'],axis=1)
+          .replace({'southwest':'SW','southeast':'SE','northeast':'NE','northwest':'NW'})
+      )
+    df2=(df1
+         .assign(Excess_charges= np.where(df1['charges'] > 13270 ,'Yes','No'))
+         .assign(Over_BMI= np.where(df1['bmi'] > 24.9 ,'Yes','No'))
+         .round({"charges":2,"bmi":1})
+         .sort_values('charges',ascending=True)
+         .reset_index(drop=True)  
+    )
+
+
+    dfuH=(df2[(df2['bmi'] > 40.0 ) & (df2['smoker']=='no')])
+    dfuH = dfuH.reset_index(drop=True)
+    return dfuH
