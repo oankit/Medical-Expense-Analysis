@@ -1,3 +1,4 @@
+import pandas as pd
 def load_and_process(url):
     df1 = (
           pd.read_csv(url)
