@@ -1,2 +1,2 @@
-For storage of external images
-
+**For storage of external images**
+---
