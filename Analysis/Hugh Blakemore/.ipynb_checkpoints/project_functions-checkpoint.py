@@ -2,11 +2,14 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+import os
 sns.set_style("ticks")
 sns.set_theme("paper")
-def load_and_process(url):
+def load_and_process(cwd):
+    os.chdir('../..')
+    os.chdir("Data/Raw")
     df1 = (
-          pd.read_csv(url)
+          pd.read_csv('medical_expenses.csv')
           .rename({'children':'Dependents'},axis=1)
           .dropna(subset=['charges'])
           .drop(['region','Dependents'],axis=1)
@@ -21,11 +24,16 @@ def load_and_process(url):
          .sort_values('charges',ascending=True)
          .reset_index(drop=True)  
     )
+    os.chdir(cwd)
+    
     return df2
 
-def Health(url):
+
+def Health(cwd):
+    os.chdir('../..')
+    os.chdir("Data/Raw")
     df1 = (
-          pd.read_csv(url)
+          pd.read_csv('medical_expenses.csv')
           .rename({'children':'Dependents'},axis=1)
           .dropna(subset=['charges'])
           .drop(['region','Dependents'],axis=1)
@@ -42,11 +50,14 @@ def Health(url):
 
     dfH=(df2[(df2['bmi'] >= 18.5) & (df2['bmi'] <=24.9 ) &(df2['smoker'] == 'no') ])
     dfH= dfH.reset_index(drop=True)
+    os.chdir(cwd)
     return dfH
 
-def unHealth(url):
+def unHealth(cwd):
+    os.chdir('../..')
+    os.chdir("Data/Raw")
     df1 = (
-          pd.read_csv(url)
+          pd.read_csv('medical_expenses.csv')
           .rename({'children':'Dependents'},axis=1)
           .dropna(subset=['charges'])
           .drop(['region','Dependents'],axis=1)
@@ -64,6 +75,7 @@ def unHealth(url):
     
     dfuH = (df2[(df2['bmi'] < 18.5) | (df2['bmi'] >24.9 ) | (df2['smoker'] == 'yes') ])
     dfuH = dfuH.reset_index(drop=True)
+    os.chdir(cwd)
     return dfuH
 
 
@@ -95,9 +107,11 @@ def BrPltECDB(df):
     stat="density",multiple="dodge",hue="bmi"
     )
     return g
-def smoker(url):
+def smoker(cwd):
+    os.chdir('../..')
+    os.chdir("Data/Raw")
     df1 = (
-          pd.read_csv(url)
+          pd.read_csv('medical_expenses.csv')
           .rename({'children':'Dependents'},axis=1)
           .dropna(subset=['charges'])
           .drop(['region','Dependents'],axis=1)
@@ -115,9 +129,11 @@ def smoker(url):
     dfuH = dfuH.reset_index(drop=True)
     return dfuH
 
-def underBmi(url):
+def underBmi(cwd):
+    os.chdir('../..')
+    os.chdir("Data/Raw")
     df1 = (
-          pd.read_csv(url)
+          pd.read_csv('medical_expenses.csv')
           .rename({'children':'Dependents'},axis=1)
           .dropna(subset=['charges'])
           .drop(['region','Dependents'],axis=1)
@@ -133,11 +149,14 @@ def underBmi(url):
 
     dfuH=(df2[(df2['bmi'] < 18.5) & (df2['smoker'] == 'no') ])
     dfuH = dfuH.reset_index(drop=True)
+    os.chdir(cwd)
     return dfuH
 
-def overBmi(url):
+def overBmi(cwd):
+    os.chdir('../..')
+    os.chdir("Data/Raw")
     df1 = (
-          pd.read_csv(url)
+          pd.read_csv('medical_expenses.csv')
           .rename({'children':'Dependents'},axis=1)
           .dropna(subset=['charges'])
           .drop(['region','Dependents'],axis=1)
@@ -153,7 +172,9 @@ def overBmi(url):
 
     dfuH=(df2[(df2['bmi'] > 24.9 ) & (df2['smoker']=='no')])
     dfuH = dfuH.reset_index(drop=True)
+    os.chdir(cwd)
     return dfuH
+
 def BoxPlt(df):
     g=sns.boxplot(x='Healthy',y='charges',data=df)
     return g
@@ -172,9 +193,11 @@ def mean(df):
     dfm=df['charges'].mean()
     dfmr = round(dfm,2)
     return dfmr
-def allsmoker(url):
+def allsmoker(cwd):
+    os.chdir('../..')
+    os.chdir("Data/Raw")
     df1 = (
-          pd.read_csv(url)
+          pd.read_csv('medical_expenses.csv')
           .rename({'children':'Dependents'},axis=1)
           .dropna(subset=['charges'])
           .drop(['region','Dependents'],axis=1)
@@ -190,11 +213,14 @@ def allsmoker(url):
 
     dfuH=(df2[(df2['smoker'] == 'yes')])
     dfuH = dfuH.reset_index(drop=True)
+    os.chdir(cwd)
     return dfuH
 
-def obese(url):
+def obese(cwd):
+    os.chdir('../..')
+    os.chdir("Data/Raw")
     df1 = (
-          pd.read_csv(url)
+          pd.read_csv('medical_expenses.csv')
           .rename({'children':'Dependents'},axis=1)
           .dropna(subset=['charges'])
           .drop(['region','Dependents'],axis=1)
@@ -211,4 +237,16 @@ def obese(url):
 
     dfuH=(df2[(df2['bmi'] > 40.0 ) & (df2['smoker']=='no')])
     dfuH = dfuH.reset_index(drop=True)
+    os.chdir(cwd)
     return dfuH
+
+def RawDir():
+    cwd=os.getcwd()
+    os.chdir('../..')
+    cwdm=os.getcwd()
+    dir = os.chdir("Data/Raw")
+    return dir
+    
+def returnDir(cwd):
+    dir = os.chdir(cwd)
+    return dir
