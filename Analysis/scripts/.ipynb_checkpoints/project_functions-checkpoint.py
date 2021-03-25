@@ -127,6 +127,7 @@ def smoker(cwd):
 
     dfuH=(df2[(df2['bmi'] >= 18.5) & (df2['bmi'] <= 24.9 ) & (df2['smoker'] == 'yes') ])
     dfuH = dfuH.reset_index(drop=True)
+    os.chdir(cwd)
     return dfuH
 
 def underBmi(cwd):
@@ -249,4 +250,210 @@ def RawDir():
     
 def returnDir(cwd):
     dir = os.chdir(cwd)
+    return dir
+
+
+#submitted data loading
+
+def load_and_processS(cwd):
+    os.chdir('../../..')
+    os.chdir("Data/Raw")
+    df1 = (
+          pd.read_csv('medical_expenses.csv')
+          .rename({'children':'Dependents'},axis=1)
+          .dropna(subset=['charges'])
+          .drop(['region','Dependents'],axis=1)
+          .replace({'southwest':'SW','southeast':'SE','northeast':'NE','northwest':'NW'})
+      )
+    df2=(df1
+         .assign(Excess_charges= np.where(df1['charges'] > 13270 ,'Yes','No'))
+         .assign(Over_BMI= np.where(df1['bmi'] > 24.9 ,'Yes','No'))
+         .assign(Under_BMI= np.where(df1['bmi'] < 18.5 ,'Yes','No'))
+         .assign(Healthy = np.where( ( (df1['bmi'] <= 24.9)& (df1['smoker'] == 'no') & (df1['bmi'] >= 18.5 ) ),'yes','no'))
+         .round({"charges":2,"bmi":1})
+         .sort_values('charges',ascending=True)
+         .reset_index(drop=True)  
+    )
+    os.chdir(cwd)
+    
+    return df2
+
+
+def HealthS(cwd):
+    os.chdir('../../..')
+    os.chdir("Data/Raw")
+    df1 = (
+          pd.read_csv('medical_expenses.csv')
+          .rename({'children':'Dependents'},axis=1)
+          .dropna(subset=['charges'])
+          .drop(['region','Dependents'],axis=1)
+          .replace({'southwest':'SW','southeast':'SE','northeast':'NE','northwest':'NW'})
+      )
+    df2=(df1
+         .assign(Excess_charges= np.where(df1['charges'] > 13270 ,'Yes','No'))
+         .assign(Healthy = np.where( ( (df1['bmi'] <= 24.9)& (df1['smoker'] == 'no') & (df1['bmi'] >= 18.5 ) ),'yes','no'))
+         .round({"charges":2,"bmi":1})
+         .sort_values('charges',ascending=True)
+         .reset_index(drop=True)  
+    )
+
+
+    dfH=(df2[(df2['bmi'] >= 18.5) & (df2['bmi'] <=24.9 ) &(df2['smoker'] == 'no') ])
+    dfH= dfH.reset_index(drop=True)
+    os.chdir(cwd)
+    return dfH
+
+def unHealthS(cwd):
+    os.chdir('../../..')
+    os.chdir("Data/Raw")
+    df1 = (
+          pd.read_csv('medical_expenses.csv')
+          .rename({'children':'Dependents'},axis=1)
+          .dropna(subset=['charges'])
+          .drop(['region','Dependents'],axis=1)
+          .replace({'southwest':'SW','southeast':'SE','northeast':'NE','northwest':'NW'})
+      )
+    df2=(df1
+         .assign(Excess_charges= np.where(df1['charges'] > 13270 ,'Yes','No'))
+         .assign(Healthy = np.where( ( (df1['bmi'] <= 24.9)& (df1['smoker'] == 'no') & (df1['bmi'] >= 18.5 ) ),'yes','no'))
+         .round({"charges":2,"bmi":1})
+         .sort_values('charges',ascending=True)
+         .reset_index(drop=True)  
+    )
+
+
+    
+    dfuH = (df2[(df2['bmi'] < 18.5) | (df2['bmi'] >24.9 ) | (df2['smoker'] == 'yes') ])
+    dfuH = dfuH.reset_index(drop=True)
+    os.chdir(cwd)
+    return dfuH
+
+def smokerS(cwd):
+    os.chdir('../../..')
+    os.chdir("Data/Raw")
+    df1 = (
+          pd.read_csv('medical_expenses.csv')
+          .rename({'children':'Dependents'},axis=1)
+          .dropna(subset=['charges'])
+          .drop(['region','Dependents'],axis=1)
+          .replace({'southwest':'SW','southeast':'SE','northeast':'NE','northwest':'NW'})
+      )
+    df2=(df1
+         .assign(Excess_charges= np.where(df1['charges'] > 13270 ,'Yes','No'))
+         .round({"charges":2,"bmi":1})
+         .sort_values('charges',ascending=True)
+         .reset_index(drop=True)  
+    )
+
+
+    dfuH=(df2[(df2['bmi'] >= 18.5) & (df2['bmi'] <= 24.9 ) & (df2['smoker'] == 'yes') ])
+    dfuH = dfuH.reset_index(drop=True)
+    os.chdir(cwd)
+    return dfuH
+
+def underBmiS(cwd):
+    os.chdir('../../..')
+    os.chdir("Data/Raw")
+    df1 = (
+          pd.read_csv('medical_expenses.csv')
+          .rename({'children':'Dependents'},axis=1)
+          .dropna(subset=['charges'])
+          .drop(['region','Dependents'],axis=1)
+          .replace({'southwest':'SW','southeast':'SE','northeast':'NE','northwest':'NW'})
+      )
+    df2=(df1
+         .assign(Excess_charges= np.where(df1['charges'] > 13270 ,'Yes','No'))
+         .round({"charges":2,"bmi":1})
+         .sort_values('charges',ascending=True)
+         .reset_index(drop=True)  
+    )
+
+
+    dfuH=(df2[(df2['bmi'] < 18.5) & (df2['smoker'] == 'no') ])
+    dfuH = dfuH.reset_index(drop=True)
+    os.chdir(cwd)
+    return dfuH
+
+def overBmiS(cwd):
+    os.chdir('../../..')
+    os.chdir("Data/Raw")
+    df1 = (
+          pd.read_csv('medical_expenses.csv')
+          .rename({'children':'Dependents'},axis=1)
+          .dropna(subset=['charges'])
+          .drop(['region','Dependents'],axis=1)
+          .replace({'southwest':'SW','southeast':'SE','northeast':'NE','northwest':'NW'})
+      )
+    df2=(df1
+         .assign(Excess_charges= np.where(df1['charges'] > 13270 ,'Yes','No'))
+         .round({"charges":2,"bmi":1})
+         .sort_values('charges',ascending=True)
+         .reset_index(drop=True)  
+    )
+
+
+    dfuH=(df2[(df2['bmi'] > 24.9 ) & (df2['smoker']=='no')])
+    dfuH = dfuH.reset_index(drop=True)
+    os.chdir(cwd)
+    return dfuH
+
+def allsmokerS(cwd):
+    os.chdir('../../..')
+    os.chdir("Data/Raw")
+    df1 = (
+          pd.read_csv('medical_expenses.csv')
+          .rename({'children':'Dependents'},axis=1)
+          .dropna(subset=['charges'])
+          .drop(['region','Dependents'],axis=1)
+          .replace({'southwest':'SW','southeast':'SE','northeast':'NE','northwest':'NW'})
+      )
+    df2=(df1
+         .assign(Excess_charges= np.where(df1['charges'] > 13270 ,'Yes','No'))
+         .round({"charges":2,"bmi":1})
+         .sort_values('charges',ascending=True)
+         .reset_index(drop=True)  
+    )
+
+
+    dfuH=(df2[(df2['smoker'] == 'yes')])
+    dfuH = dfuH.reset_index(drop=True)
+    os.chdir(cwd)
+    return dfuH
+
+def obeseS(cwd):
+    os.chdir('../../..')
+    os.chdir("Data/Raw")
+    df1 = (
+          pd.read_csv('medical_expenses.csv')
+          .rename({'children':'Dependents'},axis=1)
+          .dropna(subset=['charges'])
+          .drop(['region','Dependents'],axis=1)
+          .replace({'southwest':'SW','southeast':'SE','northeast':'NE','northwest':'NW'})
+      )
+    df2=(df1
+         .assign(Excess_charges= np.where(df1['charges'] > 13270 ,'Yes','No'))
+         .assign(Over_BMI= np.where(df1['bmi'] > 24.9 ,'Yes','No'))
+         .round({"charges":2,"bmi":1})
+         .sort_values('charges',ascending=True)
+         .reset_index(drop=True)  
+    )
+
+
+    dfuH=(df2[(df2['bmi'] > 40.0 ) & (df2['smoker']=='no')])
+    dfuH = dfuH.reset_index(drop=True)
+    os.chdir(cwd)
+    return dfuH
+
+def RawDirS():
+    cwd=os.getcwd()
+    os.chdir('../../..')
+    cwdm=os.getcwd()
+    dir = os.chdir("Data/Raw")
+    return dir
+
+def RawDirS():
+    cwd=os.getcwd()
+    os.chdir('../../..')
+    cwdm=os.getcwd()
+    dir = os.chdir("Data/Raw")
     return dir
