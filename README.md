@@ -22,3 +22,8 @@ This dataset is a simulated data set based off of the United States census which
 ## References
 
 https://www.kaggle.com/mirichoi0218/insurance
+
+## Milestone 4 video submission
+
+https://www.youtube.com/watch?v=IRE4WSA0XI4
+
